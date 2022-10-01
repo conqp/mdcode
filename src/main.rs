@@ -36,12 +36,14 @@ fn format_file(file: &Path) {
                 None => "",
             };
 
-            let language = LANGUAGES.get(extension).unwrap_or(&"");
-
             match file.to_str() {
                 Some(filename) => {
                     println!("`{}`:", filename);
-                    println!("```{}\n{}```", language, text);
+                    println!(
+                        "```{}\n{}```",
+                        LANGUAGES.get(extension).unwrap_or(&""),
+                        text
+                    );
                 }
                 None => eprintln!("Could not extract file name."),
             }
