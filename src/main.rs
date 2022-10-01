@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 use std::env::args;
-use std::fs::File;
-use std::io::{BufReader, Error, Read};
 use std::path::Path;
 
+use ezio::Readable;
 use lazy_static::lazy_static;
 
 lazy_static! {
@@ -17,19 +16,8 @@ lazy_static! {
     ]);
 }
 
-fn read_file(file: &Path) -> Result<String, Error> {
-    let fh = File::open(file)?;
-    let mut buf_reader = BufReader::new(fh);
-    let mut content = String::new();
-
-    match buf_reader.read_to_string(&mut content) {
-        Ok(_) => Ok(content),
-        Err(code) => Err(code),
-    }
-}
-
 fn format_file(file: &Path) {
-    match read_file(file) {
+    match String::read(file) {
         Ok(text) => {
             let extension = match file.extension() {
                 Some(suffix) => suffix.to_str().unwrap_or(""),
