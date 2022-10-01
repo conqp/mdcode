@@ -45,6 +45,6 @@ fn format(file: &Path) {
                 None => eprintln!("Could not extract file name."),
             }
         }
-        Err(code) => eprintln!("Error reading file: {}", code),
+        Err(error) => eprintln!("Error reading file: {}", error),
     }
 }
