@@ -6,5 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ezio = { git = "https://github.com/conqp/ezio.git", branch = "main" }
-lazy_static = "*"
+once_cell = "*"

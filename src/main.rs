@@ -2,49 +2,47 @@ use std::collections::HashMap;
 use std::env::args;
 use std::path::Path;
 
-use ezio::FileReadable;
-use lazy_static::lazy_static;
+use once_cell::sync::Lazy;
 
-lazy_static! {
-    static ref LANGUAGES: HashMap<&'static str, &'static str> = HashMap::from([
+static LANGUAGES: Lazy<HashMap<&'static str, &'static str>> = Lazy::new(|| {
+    HashMap::from([
         ("c", "c"),
         ("cpp", "cpp"),
         ("h", "cpp"),
         ("py", "python"),
         ("rs", "rust"),
         ("toml", "toml"),
-    ]);
-}
+    ])
+});
 
 fn main() {
-    let args: Vec<String> = args().collect();
-    args.iter()
-        .enumerate()
-        .filter(|&(index, _)| 0 < index)
-        .map(|(_, filename)| Path::new(filename))
-        .for_each(format)
+    args().skip(1).for_each(format)
 }
 
-fn format(file: &Path) {
-    match String::read(file) {
+fn format(file: impl AsRef<Path>) {
+    let file = file.as_ref();
+    match std::fs::read_to_string(file) {
         Ok(text) => {
-            let extension = match file.extension() {
-                Some(suffix) => suffix.to_str().unwrap_or(""),
-                None => "",
-            };
+            let extension = file
+                .extension()
+                .and_then(|ext| ext.to_str())
+                .unwrap_or_default();
 
+            let language = LANGUAGES.get(extension).unwrap_or(&"");
+            //FIXME: escape the text properly, or use indentation
             match file.to_str() {
                 Some(filename) => {
                     println!("`{}`:", filename);
                     println!(
-                        "```{}\n{}```",
-                        LANGUAGES.get(extension).unwrap_or(&""),
-                        text
+                        "```{}\n{}{}```",
+                        language,
+                        text,
+                        if !text.ends_with('\n') { "\n" } else { "" }
                     );
                 }
                 None => eprintln!("Could not extract file name."),
             }
         }
-        Err(error) => eprintln!("Error reading file: {}", error),
+        Err(code) => eprintln!("Error reading file: {}", code),
     }
 }
