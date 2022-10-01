@@ -16,7 +16,7 @@ lazy_static! {
     ]);
 }
 
-fn format_file(file: &Path) {
+fn format(file: &Path) {
     match String::read(file) {
         Ok(text) => {
             let extension = match file.extension() {
@@ -46,5 +46,5 @@ fn main() {
         .enumerate()
         .filter(|&(index, _)| 0 < index)
         .map(|(_, filename)| Path::new(filename))
-        .for_each(format_file)
+        .for_each(format)
 }
