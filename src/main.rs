@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::env::args;
 use std::path::Path;
 
-use ezio::Readable;
+use ezio::FileReadable;
 use lazy_static::lazy_static;
 
 lazy_static! {
