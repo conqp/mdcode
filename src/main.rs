@@ -16,6 +16,15 @@ lazy_static! {
     ]);
 }
 
+fn main() {
+    let args: Vec<String> = args().collect();
+    args.iter()
+        .enumerate()
+        .filter(|&(index, _)| 0 < index)
+        .map(|(_, filename)| Path::new(filename))
+        .for_each(format)
+}
+
 fn format(file: &Path) {
     match String::read(file) {
         Ok(text) => {
@@ -38,13 +47,4 @@ fn format(file: &Path) {
         }
         Err(code) => eprintln!("Error reading file: {}", code),
     }
-}
-
-fn main() {
-    let args: Vec<String> = args().collect();
-    args.iter()
-        .enumerate()
-        .filter(|&(index, _)| 0 < index)
-        .map(|(_, filename)| Path::new(filename))
-        .for_each(format)
 }
