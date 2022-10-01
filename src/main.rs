@@ -1,9 +1,10 @@
-use lazy_static::lazy_static;
 use std::collections::HashMap;
 use std::env::args;
 use std::fs::File;
 use std::io::{BufReader, Error, Read};
 use std::path::Path;
+
+use lazy_static::lazy_static;
 
 lazy_static! {
     static ref LANGUAGES: HashMap<&'static str, &'static str> = HashMap::from([
